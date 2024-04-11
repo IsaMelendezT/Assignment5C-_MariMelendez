@@ -58,21 +58,27 @@ namespace Assignment5C__MariMelendez
 
         class Lettre : Mail
         {
+            // Besides Mail fields, letter class has also a format field, for this I created a enum Format method with 2 options
             public Format LetterFormat { get; set; }
 
+            // Class constructor
             public Lettre(double weight, bool express, string destinationAddress, Format letterformat) : base(weight, express, destinationAddress)
             {
                 this.LetterFormat = letterformat;
             }
 
+            // enum Format with A3 and A4 as options
             public enum Format
             {
                 A3, A4
             }
 
+            // Override CalculatePostage() method.
             public override double CalculatePostage()
             {
+                // Determine the baseFase depending on letter format. 
                 double baseFare = this.LetterFormat == Format.A3 ? 3.5 : 2.5;
+                // Determine the amount to pay depending if the shipping method is express or not
                 double amount = Express ? 2 * (baseFare + Weight * 0.001) : baseFare + 0.001 * Weight;
                 return amount;
             }
@@ -81,14 +87,19 @@ namespace Assignment5C__MariMelendez
 
         class Parcel : Mail
         {
+            // Besides Mail fields, letter class has also a volume field
             public double Volume { get; set; }
+
+            // Class Constructor
             public Parcel(double weight, bool express, string destinationAddress, double volume) : base(weight, express, destinationAddress)
             {
                 Volume = volume;
             }
 
+            // Override CalculatePostage() method
             public override double CalculatePostage()
             {
+                // Calculate the amount to pay depending if the shipping method is express or not
                 double amount = Express ? 2 * (0.25 * Volume + Weight * 0.001) : 0.25 * Volume + Weight * 0.001;
                 return amount;
             }
@@ -100,8 +111,10 @@ namespace Assignment5C__MariMelendez
             {
             }
 
+            // Override CalculatePostage() method
             public override double CalculatePostage()
             {
+                // Calculate the amount to pay depending if the shipping method is express or not
                 double amount = Express ? 2 * 5 * 0.001 * Weight : 5 * 0.001 * Weight;
                 return amount;
             }
@@ -109,15 +122,18 @@ namespace Assignment5C__MariMelendez
 
         class Box
         {
+            // This class will receive a maxSize field and will add all mail to the List<Mail>
             private List<Mail> mails;
             private int maxSize;
 
+            // Class constructor accepting maxSize 
             public Box(int maxSize)
             {
                 this.maxSize = maxSize;
                 mails = new List<Mail>();
             }
 
+            // addMail() method to verify if the mailBox is full and if not add the mail to the list
             public void addMail(Mail mail)
             {
                 if (mails.Count < maxSize)
@@ -130,8 +146,10 @@ namespace Assignment5C__MariMelendez
                 }
             }
 
+            //mailIsValid() method to count the number of invalid methods
             public int mailIsInvalid()
             {
+                // Declaring and initializing count variable to count the invalid mails
                 int count = 0;
                 foreach (Mail mail in mails)
                 {
@@ -147,6 +165,7 @@ namespace Assignment5C__MariMelendez
                 return count;
             }
 
+            //  stamp() method to calculate the total of the postage by calling the CalculatePostage() of each class
             public double stamp()
             {
                 double mailTotal = 0.0;
@@ -164,6 +183,7 @@ namespace Assignment5C__MariMelendez
                 return mailTotal;
             }
 
+            // display() method to display all the contents, cost and elements of the mailBox
             public void display()
             {
                 Console.WriteLine("The contents of the mailbox:");
@@ -171,10 +191,11 @@ namespace Assignment5C__MariMelendez
                 {
                     if (string.IsNullOrEmpty(mail.DestinationAddress) || (mail is Parcel && ((Parcel)mail).Volume > 50))
                     {
-                        Console.WriteLine(mail.GetType().Name + " (Invalid courier)");
+                        Console.WriteLine(mail.GetType().Name);
+                        Console.WriteLine("      (Invalid courier)");
                         Console.WriteLine("      Weight: " + mail.Weight + " grams");
                         Console.WriteLine("      Express: " + (mail.Express ? "yes" : "no"));
-                        Console.WriteLine("      Destination:");
+                        Console.WriteLine("      Destination:" + mail.DestinationAddress);
                         Console.WriteLine("      Price: 0.0");
                         if (mail is Lettre)
                         {
