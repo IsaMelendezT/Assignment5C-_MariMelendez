@@ -54,5 +54,20 @@ namespace Assignment5C__MariMelendez
             }
 
         }
+
+        class Parcel : Mail
+        {
+            public double Volume { get; set; }
+            public Parcel(double weight, bool express, string destinationAddress, double volume) : base(weight, express, destinationAddress)
+            {
+                Volume = volume;
+            }
+
+            public override double CalculatePostage() 
+            {
+                double amount = Express ? 2 * (0.25 * Volume + Weight * 0.001) : 0.25 * Volume + Weight * 0.001;
+                return amount;
+            } 
+        }
     }
 }
