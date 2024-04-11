@@ -69,5 +69,18 @@ namespace Assignment5C__MariMelendez
                 return amount;
             } 
         }
+
+        class Advertisement : Mail
+        {
+            public Advertisement(double weight, bool express, string destinationAddress) : base(weight, express, destinationAddress)
+            {
+            }
+
+            public override double CalculatePostage()
+            {
+                double amount = Express ? 2 * 5 * 0.001 * Weight : 5 * 0.001 * Weight;
+                return amount;
+            }
+        }
     }
 }
